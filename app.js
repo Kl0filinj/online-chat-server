@@ -6,7 +6,7 @@ const { Server } = require("socket.io");
 const router = require("./route");
 // require('dotenv').config();
 
-// const PORT = process.env.PORT;
+const PORT = 3000;
 const app = express();
 app.use(cors({ origin: "*" }));
 app.use(router);
@@ -39,6 +39,6 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(3030, () => {
-  console.log(`Server running. Use our API on port: ${3030}`);
+server.listen(PORT, () => {
+  console.log(`Server running. Use our API on port: ${PORT}`);
 });
