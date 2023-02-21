@@ -1,25 +1,42 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+const express = require("express");
+// const logger = require('morgan');
+const cors = require("cors");
+const http = require("http");
+const { Server } = require("socket.io");
+// require('dotenv').config();
 
-const contactsRouter = require('./routes/api/contacts')
+// const PORT = process.env.PORT;
 
-const app = express()
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+  },
+});
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+// app.use(logger('short'));
+app.use(cors());
+app.use(express.json());
 
-app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
+io.on("connection", (socket) => {
+  console.log(`User ${socket.id} CONNECTED`);
 
-app.use('/api/contacts', contactsRouter)
+  socket.on("joinRoom", (data) => {
+    socket.join(data);
+    console.log(`User CONNECTED TO ROOM ${data}`);
+  });
 
-app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
-})
+  socket.on("sendMessage", (data) => {
+    console.log("SEND MESSAGE", data);
+    socket.to(data.roomId).emit("receiveMessage", data);
+  });
 
-app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
-})
+  socket.on("disconnect", () => {
+    console.log(`User ${socket.id} DISCONNECTED`);
+  });
+});
 
-module.exports = app
+server.listen(3030, () => {
+  console.log(`Server running. Use our API on port: ${3030}`);
+});
