@@ -3,15 +3,17 @@ const express = require("express");
 const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
+const router = require("./route");
 // require('dotenv').config();
 
 // const PORT = process.env.PORT;
-
 const app = express();
+app.use(cors({ origin: "*" }));
+app.use(router);
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "https://kl0filinj.github.io",
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
