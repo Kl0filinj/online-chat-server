@@ -4,12 +4,17 @@ const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
 const router = require("./route");
+const connectMongo = require("./db/connection");
 // require('dotenv').config();
 
 const PORT = 3000;
 const app = express();
+
 app.use(cors({ origin: "*" }));
 app.use(router);
+app.use(cors());
+app.use(express.json());
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
@@ -18,8 +23,6 @@ const io = new Server(server, {
 });
 
 // app.use(logger('short'));
-app.use(cors());
-app.use(express.json());
 
 io.on("connection", (socket) => {
   console.log(`User ${socket.id} CONNECTED`);
@@ -39,6 +42,15 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(PORT, () => {
-  console.log(`Server running. Use our API on port: ${PORT}`);
-});
+(async function () {
+  try {
+    await connectMongo();
+    console.log("Database connection successful");
+    server.listen(PORT, () => {
+      console.log(`Server running. Use our API on port: ${PORT}`);
+    });
+  } catch (error) {
+    console.log("status 500, server or db error " + error);
+    process.exit();
+  }
+})();
