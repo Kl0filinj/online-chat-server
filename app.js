@@ -3,7 +3,7 @@ const logger = require("morgan");
 const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
-const router = require("./route");
+// const router = require("./route");
 const connectMongo = require("./db/connection");
 
 const userRoutes = require("./routes/userRoute");
@@ -14,11 +14,20 @@ const roomRoutes = require("./routes/roomRoute");
 const PORT = 3030;
 const app = express();
 
-app.use(cors({ origin: "*", methods: ["GET", "POST"] }));
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
+
+app.use(cors({ origin: "*" }));
+
 app.use(express.json());
 app.use(logger("short"));
 
-app.use(router);
+// app.use(router);
 app.use("/api/users", userRoutes);
 app.use("/api/rooms", roomRoutes);
 
@@ -30,13 +39,6 @@ app.use((err, req, res, next) => {
   // don't remove or change !!!!
   const { status = 500, message = "Server error" } = err;
   res.status(status).json({ message });
-});
-
-const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: "*",
-  },
 });
 
 io.on("connection", (socket) => {
@@ -57,7 +59,7 @@ io.on("connection", (socket) => {
   });
 });
 
-(async function () {
+async function start() {
   try {
     await connectMongo();
     console.log("Database connection successful");
@@ -68,4 +70,6 @@ io.on("connection", (socket) => {
     console.log("status 500, server or db error " + error);
     process.exit();
   }
-})();
+}
+
+start();
