@@ -2,25 +2,14 @@ const mongoose = require("mongoose");
 
 const roomSchema = new mongoose.Schema(
   {
-    messages: {
-      type: Array,
-      required: [true, "Password is required"],
-    },
-    email: {
-      type: String,
-      required: [true, "Email is required"],
-      unique: true,
-    },
+    messages: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],
+    residents: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     name: {
       type: String,
-      required: [true, "Name is required"],
-    },
-    token: {
-      type: String,
-      default: null,
+      default: "Default Room Name",
     },
   },
-  { versionKey: false, timestamps: true }
+  { timestamps: true }
 );
 
 const Room = mongoose.model("Room", roomSchema);
