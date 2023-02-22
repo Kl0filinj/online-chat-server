@@ -61,7 +61,7 @@ io.on("connection", (socket) => {
   try {
     await connectMongo();
     console.log("Database connection successful");
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log(`Server running. Use our API on port: ${PORT}`);
     });
   } catch (error) {
