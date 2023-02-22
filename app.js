@@ -1,19 +1,23 @@
 const express = require("express");
-// const logger = require('morgan');
+const logger = require("morgan");
 const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
 const router = require("./route");
 const connectMongo = require("./db/connection");
+const userRoutes = require("./routes/userRoute");
+
 // require('dotenv').config();
 
 const PORT = 3000;
 const app = express();
 
 app.use(cors({ origin: "*" }));
-app.use(router);
-app.use(cors());
 app.use(express.json());
+app.use(logger("short"));
+
+app.use(router);
+app.use("/api/users", userRoutes);
 
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -21,8 +25,6 @@ const io = new Server(server, {
     origin: "*",
   },
 });
-
-// app.use(logger('short'));
 
 io.on("connection", (socket) => {
   console.log(`User ${socket.id} CONNECTED`);
