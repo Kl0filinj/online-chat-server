@@ -5,7 +5,9 @@ const http = require("http");
 const { Server } = require("socket.io");
 const router = require("./route");
 const connectMongo = require("./db/connection");
+
 const userRoutes = require("./routes/userRoute");
+const roomRoutes = require("./routes/roomRoute");
 
 // require('dotenv').config();
 
@@ -18,6 +20,7 @@ app.use(logger("short"));
 
 app.use(router);
 app.use("/api/users", userRoutes);
+app.use("/api/rooms", roomRoutes);
 
 const server = http.createServer(app);
 const io = new Server(server, {
