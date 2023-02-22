@@ -14,7 +14,7 @@ const roomRoutes = require("./routes/roomRoute");
 const PORT = 3030;
 const app = express();
 
-app.use(cors({ origin: "*" }));
+app.use(cors({ origin: "*", methods: ["GET", "POST"] }));
 app.use(express.json());
 app.use(logger("short"));
 
