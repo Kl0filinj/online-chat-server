@@ -22,6 +22,16 @@ app.use(router);
 app.use("/api/users", userRoutes);
 app.use("/api/rooms", roomRoutes);
 
+app.use((req, res) => {
+  res.status(404).json({ message: "Not found" });
+});
+
+app.use((err, req, res, next) => {
+  // don't remove or change !!!!
+  const { status = 500, message = "Server error" } = err;
+  res.status(status).json({ message });
+});
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
