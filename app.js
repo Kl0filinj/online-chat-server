@@ -3,7 +3,7 @@ const logger = require("morgan");
 const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
-// const router = require("./route");
+const router = require("./route");
 const connectMongo = require("./db/connection");
 
 const userRoutes = require("./routes/userRoute");
@@ -27,7 +27,7 @@ app.use(cors({ origin: "*" }));
 app.use(express.json());
 app.use(logger("short"));
 
-// app.use(router);
+app.use(router);
 app.use("/api/users", userRoutes);
 app.use("/api/rooms", roomRoutes);
 
@@ -36,7 +36,6 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  // don't remove or change !!!!
   const { status = 500, message = "Server error" } = err;
   res.status(status).json({ message });
 });
