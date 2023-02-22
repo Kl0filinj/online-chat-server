@@ -11,7 +11,7 @@ const roomRoutes = require("./routes/roomRoute");
 
 // require('dotenv').config();
 
-const PORT = 3000;
+const PORT = 3030;
 const app = express();
 
 app.use(cors({ origin: "*" }));
