@@ -3,7 +3,7 @@ const logger = require("morgan");
 const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
-const router = require("./route");
+const router = require("./routes/route");
 const connectMongo = require("./db/connection");
 
 const userRoutes = require("./routes/userRoute");
