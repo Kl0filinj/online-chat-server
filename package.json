@@ -1,7 +1,7 @@
 {
   "name": "template",
   "version": "0.0.0",
-  "private": false,
+  "private": true,
   "scripts": {
     "start": "node ./app.js",
     "start:dev": "nodemon ./app.js",
