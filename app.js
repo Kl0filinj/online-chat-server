@@ -8,6 +8,7 @@ const connectMongo = require("./db/connection");
 
 const userRoutes = require("./routes/userRoute");
 const roomRoutes = require("./routes/roomRoute");
+const messageRoutes = require("./routes/messageRoute");
 
 // require('dotenv').config();
 
@@ -30,6 +31,7 @@ app.use(logger("short"));
 app.use(router);
 app.use("/api/users", userRoutes);
 app.use("/api/rooms", roomRoutes);
+app.use("/api/messages", messageRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
