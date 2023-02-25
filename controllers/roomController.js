@@ -15,7 +15,10 @@ const createRoomController = async (req, res) => {
 };
 
 const getAllRoomController = async (req, res) => {
-  const allRooms = await Room.find({}).populate("messages", "text user room");
+  const allRooms = await Room.find().populate({
+    path: "messages",
+    select: ["text", "user"],
+  });
   if (!allRooms) {
     throw RequestError(404, "Not found");
   }
@@ -24,10 +27,10 @@ const getAllRoomController = async (req, res) => {
 
 const getRoomByIdController = async (req, res) => {
   const { id } = req.params;
-  const room = await Room.findById({ _id: id }).populate(
-    "messages",
-    "text user room"
-  );
+  const room = await Room.findById({ _id: id }).populate({
+    path: "messages",
+    select: ["text", "user"],
+  });
   if (!room) {
     throw RequestError(404, "Not found");
   }

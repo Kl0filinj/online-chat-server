@@ -11,9 +11,11 @@ const addMessageController = async (req, res) => {
   //   if (!room) {
   //     throw RequestError(404, "Not found");
   //   }
-
   await Room.findByIdAndUpdate(req.body.room, {
     $push: { messages: message },
+  }).populate({
+    path: "messages",
+    select: ["text", "user"],
   });
   return res.status(201).json(message);
 };
