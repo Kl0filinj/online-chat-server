@@ -1,5 +1,6 @@
 const RequestError = require("../helpers/RequestError");
 const Room = require("../models/roomModel");
+const { User } = require("../models/userModel");
 
 const createRoomController = async (req, res) => {
   const { name: roomName } = req.body;
@@ -37,8 +38,39 @@ const getRoomByIdController = async (req, res) => {
   return res.status(200).json(room);
 };
 
+const addUserToRoom = async (req, res) => {
+  const { _id: userID } = req.user;
+
+  const user = await User.findById(userID);
+
+  if (!user) {
+    throw RequestError(404, "User not found");
+  }
+  await Room.findByIdAndUpdate(req.body.roomId, {
+    $push: { residents: { ...req.body } },
+  });
+  return res.status(201).json(...req.body);
+};
+
+const removeUserFromRoom = async (req, res) => {
+  const { _id: userID } = req.user;
+
+  const user = await User.findById({ _id: userID });
+
+  if (!user) {
+    throw RequestError(404, "User not found");
+  }
+
+  await Room.findByIdAndUpdate(req.body.roomId, {
+    $pull: { residents: userID },
+  }).populate("residents");
+  return res.status(201).json(...req.body);
+};
+
 module.exports = {
   createRoomController,
   getAllRoomController,
   getRoomByIdController,
+  addUserToRoom,
+  removeUserFromRoom,
 };

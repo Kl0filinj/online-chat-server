@@ -10,8 +10,6 @@ const userRoutes = require("./routes/userRoute");
 const roomRoutes = require("./routes/roomRoute");
 const messageRoutes = require("./routes/messageRoute");
 
-// require('dotenv').config();
-
 const PORT = 3030;
 const app = express();
 
@@ -46,8 +44,9 @@ io.on("connection", (socket) => {
   console.log(`User ${socket.id} CONNECTED`);
 
   socket.on("joinRoom", (data) => {
-    socket.join(data);
-    console.log(`User CONNECTED TO ROOM ${data}`);
+    socket.join(data.roomId);
+    console.log(`User CONNECTED TO ROOM ${data.roomId}`);
+    socket.to(data.roomId).emit("newUser", data);
   });
 
   socket.on("sendMessage", (data) => {

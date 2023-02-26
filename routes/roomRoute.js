@@ -5,6 +5,8 @@ const {
   createRoomController,
   getAllRoomController,
   getRoomByIdController,
+  addUserToRoom,
+  removeUserFromRoom,
 } = require("../controllers/roomController");
 
 const authMiddleware = require("../middlewares/authMiddleware");
@@ -16,5 +18,9 @@ router.post("/", authMiddleware, asyncWrapper(createRoomController));
 router.get("/", authMiddleware, asyncWrapper(getAllRoomController));
 // get room by id
 router.get("/:id", authMiddleware, asyncWrapper(getRoomByIdController));
+
+router.post("/residents", authMiddleware, asyncWrapper(addUserToRoom));
+
+router.delete("/residents", authMiddleware, asyncWrapper(removeUserFromRoom));
 
 module.exports = router;
