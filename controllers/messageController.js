@@ -2,9 +2,11 @@ const Message = require("../models/messageModel");
 const Room = require("../models/roomModel");
 
 const addMessageController = async (req, res) => {
-  const { _id: userID } = req.user;
+  const { name: author } = req.user;
 
-  const message = new Message({ ...req.body, user: userID });
+  const options = req.body.author ? { ...req.body } : { ...req.body, author };
+
+  const message = new Message(options);
   await message.save();
 
   //   const room = await Room.findById({ _id: roomId });
@@ -15,9 +17,14 @@ const addMessageController = async (req, res) => {
     $push: { messages: message },
   }).populate({
     path: "messages",
-    select: ["text", "user"],
+    select: ["text", "author", "createdAt"],
   });
-  return res.status(201).json(message);
+  return res.status(201).json({
+    _id: message._id,
+    text: message.text,
+    author: message.author,
+  });
+  // return res.status(201);
 };
 
 module.exports = {

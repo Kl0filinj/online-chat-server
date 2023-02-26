@@ -52,7 +52,7 @@ io.on("connection", (socket) => {
 
   socket.on("sendMessage", (data) => {
     console.log("SEND MESSAGE", data);
-    socket.to(data.roomId).emit("receiveMessage", data);
+    socket.to(data.room).emit("receiveMessage", data);
   });
 
   socket.on("disconnect", () => {
