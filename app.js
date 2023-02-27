@@ -4,13 +4,11 @@ const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
 const router = require("./routes/route");
-const connectMongo = require("./db/connection");
 
 const userRoutes = require("./routes/userRoute");
 const roomRoutes = require("./routes/roomRoute");
 const messageRoutes = require("./routes/messageRoute");
 
-const PORT = 3030;
 const app = express();
 
 const server = http.createServer(app);
@@ -59,17 +57,4 @@ io.on("connection", (socket) => {
   });
 });
 
-async function start() {
-  try {
-    await connectMongo();
-    console.log("Database connection successful");
-    server.listen(PORT, () => {
-      console.log(`Server running. Use our API on port: ${PORT}`);
-    });
-  } catch (error) {
-    console.log("status 500, server or db error " + error);
-    process.exit();
-  }
-}
-
-start();
+module.exports = server;
