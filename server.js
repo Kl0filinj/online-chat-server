@@ -1,6 +1,7 @@
 const server = require("./app");
 const connectMongo = require("./db/connection");
-const { PORT } = process.env;
+require("dotenv").config();
+const PORT = process.env.PORT;
 console.log(PORT);
 
 async function start() {

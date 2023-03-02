@@ -18,9 +18,8 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
   },
 });
-
+console.log("BEFORE MIDDLEWARES");
 app.use(cors({ origin: "*" }));
-
 app.use(express.json());
 app.use(logger("short"));
 
@@ -37,6 +36,7 @@ app.use((err, req, res, next) => {
   const { status = 500, message = "Server error" } = err;
   res.status(status).json({ message });
 });
+console.log("AFTER MIDDLEWARES");
 
 io.on("connection", (socket) => {
   console.log(`User ${socket.id} CONNECTED`);
@@ -56,5 +56,6 @@ io.on("connection", (socket) => {
     console.log(`User ${socket.id} DISCONNECTED`);
   });
 });
+console.log("AFTER SOCKETS");
 
 module.exports = server;
