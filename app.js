@@ -19,7 +19,7 @@ const io = new Server(server, {
   },
 });
 console.log("BEFORE MIDDLEWARES");
-app.use(cors({ origin: "*" }));
+app.use(cors());
 app.use(express.json());
 app.use(logger("short"));
 
