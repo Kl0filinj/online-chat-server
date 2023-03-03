@@ -44,11 +44,21 @@ io.on("connection", (socket) => {
   socket.on("joinRoom", (data) => {
     socket.join(data.roomId);
     console.log(`User CONNECTED TO ROOM ${data.roomId}`);
-    socket.to(data.roomId).emit("newUser", data);
+    io.sockets.in(data.roomId).emit("newUser", data);
+
+    // io.sockets.in(data.roomId).emit("receiveMessage", {
+    //   room: data.roomId,
+    //   text: `User ${data.userName} connected to room !`,
+    //   author: "ADMIN",
+    // });
+  });
+
+  socket.on("leaveRoom", (data) => {
+    socket.leave(data.roomId);
+    console.log(`User LEAVE ROOM ${data.roomId}`);
   });
 
   socket.on("sendMessage", (data) => {
-    console.log("SEND MESSAGE", data);
     socket.to(data.room).emit("receiveMessage", data);
   });
 
