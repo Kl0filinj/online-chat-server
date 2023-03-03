@@ -52,8 +52,17 @@ io.on("connection", (socket) => {
     socket.to(data.room).emit("receiveMessage", data);
   });
 
+  socket.on("startTyping", (data) => {
+    socket.to(data.roomId).emit("typingResponse", data.typingUserMessage);
+  });
+
+  socket.on("stopTyping", (data) => {
+    socket.to(data.roomId).emit("typingResponse", data.typingUserMessage);
+  });
+
   socket.on("disconnect", () => {
     console.log(`User ${socket.id} DISCONNECTED`);
+    socket.disconnect();
   });
 });
 console.log("AFTER SOCKETS");
