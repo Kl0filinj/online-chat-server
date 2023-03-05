@@ -37,7 +37,7 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message });
 });
 console.log("AFTER MIDDLEWARES");
-
+// const USERS = [];
 io.on("connection", (socket) => {
   console.log(`User ${socket.id} CONNECTED`);
 
@@ -45,17 +45,12 @@ io.on("connection", (socket) => {
     socket.join(data.roomId);
     console.log(`User CONNECTED TO ROOM ${data.roomId}`);
     io.sockets.in(data.roomId).emit("newUser", data);
-
-    // io.sockets.in(data.roomId).emit("receiveMessage", {
-    //   room: data.roomId,
-    //   text: `User ${data.userName} connected to room !`,
-    //   author: "ADMIN",
-    // });
   });
 
   socket.on("leaveRoom", (data) => {
     socket.leave(data.roomId);
     console.log(`User LEAVE ROOM ${data.roomId}`);
+    // console.log(socket);
   });
 
   socket.on("sendMessage", (data) => {
@@ -75,6 +70,5 @@ io.on("connection", (socket) => {
     socket.disconnect();
   });
 });
-console.log("AFTER SOCKETS");
 
 module.exports = server;
