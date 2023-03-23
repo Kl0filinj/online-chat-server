@@ -18,7 +18,7 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
   },
 });
-console.log("BEFORE MIDDLEWARES");
+
 app.use(cors());
 app.use(express.json());
 app.use(logger("short"));
@@ -36,8 +36,7 @@ app.use((err, req, res, next) => {
   const { status = 500, message = "Server error" } = err;
   res.status(status).json({ message });
 });
-console.log("AFTER MIDDLEWARES");
-// const USERS = [];
+
 io.on("connection", (socket) => {
   console.log(`User ${socket.id} CONNECTED`);
 
@@ -48,9 +47,10 @@ io.on("connection", (socket) => {
   });
 
   socket.on("leaveRoom", (data) => {
-    socket.leave(data.roomId);
-    console.log(`User LEAVE ROOM ${data.roomId}`);
-    // console.log(socket);
+    socket.leave(data);
+    console.log(`User LEAVE ROOM ${data}`);
+    socket.to(data).emit("leaveRoomResp", { data });
+    socket.emit("leaveRoomResp", { data });
   });
 
   socket.on("sendMessage", (data) => {

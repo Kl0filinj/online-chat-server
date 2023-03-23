@@ -21,6 +21,10 @@ router.get("/:id", authMiddleware, asyncWrapper(getRoomByIdController));
 
 router.post("/residents", authMiddleware, asyncWrapper(addUserToRoom));
 
-router.delete("/residents", authMiddleware, asyncWrapper(removeUserFromRoom));
+router.delete(
+  "/residents/:roomId",
+  authMiddleware,
+  asyncWrapper(removeUserFromRoom)
+);
 
 module.exports = router;
