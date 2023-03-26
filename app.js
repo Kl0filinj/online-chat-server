@@ -46,11 +46,11 @@ io.on("connection", (socket) => {
     io.sockets.in(data.roomId).emit("newUser", data);
   });
 
-  socket.on("leaveRoom", (data) => {
-    socket.leave(data);
-    console.log(`User LEAVE ROOM ${data}`);
-    socket.to(data).emit("leaveRoomResp", { data });
-    socket.emit("leaveRoomResp", { data });
+  socket.on("leaveRoom", ({ roomId, userId, userName }) => {
+    socket.leave(roomId);
+    console.log(`User LEAVE ROOM ${roomId}`);
+    socket.to(roomId).emit("leaveRoomResp", { userId, userName });
+    socket.emit("leaveRoomResp", { userId, userName });
   });
 
   socket.on("sendMessage", (data) => {

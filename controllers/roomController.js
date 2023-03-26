@@ -48,11 +48,12 @@ const getRoomByIdController = async (req, res) => {
 const addUserToRoom = async (req, res) => {
   const { _id: userID, email, name } = req.user;
 
-  const user = await User.findById(userID);
+  const room = await Room.findById(req.body.roomId);
 
-  if (!user) {
-    throw RequestError(404, "User not found");
+  if (room.residents.includes(userID)) {
+    throw RequestError(404, "User already exists in room");
   }
+
   await Room.findByIdAndUpdate(req.body.roomId, {
     $push: { residents: { _id: userID, email, name } },
   }).populate({
